@@ -1,0 +1,68 @@
+{
+  "primary_categories": [
+    {
+      "name": "Apparel",
+      "sub_categories": [
+        "Men Clothing",
+        "Women Clothing",
+        "Kids Clothing",
+        "Footwear",
+        "Accessories"
+      ]
+    },
+    {
+      "name": "Electronics",
+      "sub_categories": [
+        "Mobiles",
+        "Laptops",
+        "Audio",
+        "Smart Home",
+        "Wearables",
+        "Accessories"
+      ]
+    },
+    {
+      "name": "Home Goods",
+      "sub_categories": [
+        "Kitchen",
+        "Furniture",
+        "Home Decor",
+        "Storage",
+        "Cleaning Supplies"
+      ]
+    },
+    {
+      "name": "Beauty & Personal Care",
+      "sub_categories": [
+        "Skin Care",
+        "Hair Care",
+        "Fragrance",
+        "Makeup",
+        "Bath & Body"
+      ]
+    },
+    {
+      "name": "Grocery",
+      "sub_categories": [
+        "Snacks",
+        "Beverages",
+        "Staples",
+        "Fresh Produce",
+        "Packaged Goods"
+      ]
+    }
+  ],
+
+  "sustainability_filters": [
+    "Plastic-Free",
+    "Recycled",
+    "Reusable",
+    "Biodegradable",
+    "Compostable",
+    "Organic",
+    "Vegan",
+    "Cruelty-Free",
+    "Low Carbon",
+    "Water-Saving"
+  ]
+}

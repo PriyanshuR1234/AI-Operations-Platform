@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI B2B Proposal Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --secondary: #8b5cf6;
+            --success: #10b981;
+            --bg-gradient: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-gradient);
+            margin: 0;
+            padding: 0;
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            width: 100%;
+            text-align: center;
+            padding: 2rem 0;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
+            border-bottom: 1px solid var(--glass-border);
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .back-link {
+            position: absolute;
+            left: 5%;
+            top: 50%;
+            transform: translateY(-50%);
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .page-container {
+            display: flex;
+            gap: 2rem;
+            width: 95%;
+            max-width: 1400px;
+            justify-content: center;
+            align-items: flex-start;
+            margin-bottom: 4rem;
+        }
+
+        @media (max-width: 900px) {
+            .page-container {
+                flex-direction: column;
+            }
+        }
+
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 25px -5px rgb(0 0 0 / 0.1);
+            border: 1px solid var(--glass-border);
+        }
+
+        .input-panel {
+            flex: 1;
+            min-width: 350px;
+        }
+
+        .result-panel {
+            flex: 2;
+            min-width: 0;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            color: var(--text-main);
+            background: #fff;
+            box-sizing: border-box;
+            transition: all 0.2s;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        .mic-btn {
+            position: absolute;
+            right: 0.5rem;
+            bottom: 0.5rem;
+            background: #eff6ff;
+            color: var(--primary);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+            font-size: 1.2rem;
+        }
+
+        .mic-btn:hover {
+            background: #dbeafe;
+        }
+
+        .mic-btn.recording {
+            background: #fee2e2;
+            color: #ef4444;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+            }
+
+            70% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+            }
+
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+            }
+        }
+
+        .cta-button {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fff;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.4);
+        }
+
+        .print-btn {
+            background: linear-gradient(135deg, #475569 0%, #334155 100%);
+            width: auto;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+        }
+
+        .save-btn {
+            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+            width: auto;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .ai-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.75rem;
+            background: linear-gradient(135deg, var(--secondary) 0%, #ec4899 100%);
+            color: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-weight: 700;
+            margin-left: 0.5rem;
+            vertical-align: middle;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        th,
+        td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: #f8fafc;
+            font-weight: 600;
+            color: #475569;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+
+        td input[type="text"] {
+            border: 1px solid transparent;
+            background: transparent;
+            width: 100%;
+            padding: 0.5rem;
+            font-family: inherit;
+            font-size: 1rem;
+            border-radius: 4px;
+            transition: 0.2s;
+        }
+
+        td input[type="text"]:hover,
+        td input[type="text"]:focus {
+            border-color: #cbd5e1;
+            background: #f8fafc;
+            outline: none;
+        }
+
+        .editable-area {
+            width: 100%;
+            min-height: 100px;
+            padding: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: #fff;
+            font-family: inherit;
+            font-size: 1rem;
+            line-height: 1.6;
+            resize: vertical;
+            transition: 0.2s;
+        }
+
+        .editable-area:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        .action-bar {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-muted);
+        }
+
+        .empty-state p {
+            font-size: 1.1rem;
+        }
+
+        .empty-state .icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+
+            header,
+            .input-panel,
+            .action-bar,
+            .back-link {
+                display: none !important;
+            }
+
+            .page-container {
+                width: 100%;
+                max-width: none;
+                margin: 0;
+            }
+
+            .glass-panel {
+                box-shadow: none;
+                border: none;
+                padding: 0;
+            }
+
+            th {
+                background: #f1f5f9 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            td input {
+                border: none !important;
+                background: transparent !important;
+            }
+
+            .editable-area {
+                border: none !important;
+                padding: 0 !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <a href="/" class="back-link">← Back to Dashboard</a>
+        <h1>AI B2B Proposal Generator</h1>
+        <p>Translate client needs and budget constraints into a structured, sustainable business proposal instantly.</p>
+    </header>
+
+    <main class="page-container">
+        <!-- Input Section -->
+        <div class="glass-panel input-panel">
+            <form action="/proposal" method="post" id="proposalForm">
+                <div class="form-group">
+                    <label>Client Overview & Requirements</label>
+                    <textarea class="form-control" name="userInput" id="userInput"
+                        placeholder="E.g. The client needs eco-friendly packaging for their new coffee line. They want compostable cups and recycled sleeves..."
+                        required><%= locals.proposalData ? '' : '' %></textarea>
+                    <button type="button" class="mic-btn" id="micBtn" title="Speak to type">🎤</button>
+                </div>
+
+                <div class="form-group">
+                    <label>Budget Constraint / Limit</label>
+                    <input type="text" class="form-control" name="budgetInput" placeholder="E.g. $50,000 maximum">
+                </div>
+
+                <button type="submit" class="cta-button" id="generateBtn">
+                    <span>Generate Proposal</span>
+                    <span>✨</span>
+                </button>
+            </form>
+        </div>
+
+        <!-- Result Section -->
+        <div class="glass-panel result-panel">
+            <% if (locals.proposalData) { %>
+                <div class="result-header">
+                    <h2>Proposed Strategy <span class="ai-badge">AI Generated</span></h2>
+                    <div class="badge">Draft Mode — Click fields to edit</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Impact Positioning Summary</label>
+                    <textarea class="editable-area"><%= proposalData.impactPositioning %></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Suggested Sustainable Product Mix</label>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Reasoning & Impact</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% proposalData.productMix.forEach(product=> { %>
+                                <tr>
+                                    <td><input type="text" value="<%= product.item %>"></td>
+                                    <td><input type="text" value="<%= product.reasoning %>"></td>
+                                </tr>
+                                <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="display: flex; gap: 2rem;">
+                    <div class="form-group" style="flex: 1;">
+                        <label>Budget Allocation</label>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Amount</th>
+                                    <th>%</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% proposalData.budgetAllocation.forEach(alloc=> { %>
+                                    <tr>
+                                        <td><input type="text" value="<%= alloc.category %>"></td>
+                                        <td><input type="text" value="<%= alloc.amount %>"></td>
+                                        <td><input type="text" value="<%= alloc.percentage %>" style="width: 60px;">
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="form-group" style="flex: 1;">
+                        <label>Estimated Cost Breakdown</label>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Cost Block</th>
+                                    <th>Estimated Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% proposalData.costBreakdown.forEach(cost=> { %>
+                                    <tr>
+                                        <td><input type="text" value="<%= cost.item %>"></td>
+                                        <td><input type="text" value="<%= cost.cost %>"></td>
+                                    </tr>
+                                    <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="action-bar">
+                    <button class="cta-button save-btn">Save Draft</button>
+                    <button class="cta-button print-btn" onclick="window.print()">Print Official Proposal</button>
+                </div>
+                <% } else { %>
+                    <div class="empty-state">
+                        <div class="icon">📝</div>
+                        <h2>No Proposal Generated Yet</h2>
+                        <p>Enter your client's requirements and budget on the left, then click Generate to let the AI
+                            build a comprehensive sustainable proposal strategy.</p>
+                    </div>
+                    <% } %>
+        </div>
+    </main>
+
+    <script>
+        // Speech to text implementation for the User Input field
+        const micBtn = document.getElementById('micBtn');
+        const userInput = document.getElementById('userInput');
+
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const recognition = new SpeechRecognition();
+
+            recognition.continuous = true;
+            recognition.interimResults = true;
+
+            let isRecording = false;
+
+            micBtn.addEventListener('click', () => {
+                if (isRecording) {
+                    recognition.stop();
+                    micBtn.classList.remove('recording');
+                } else {
+                    recognition.start();
+                    micBtn.classList.add('recording');
+                    userInput.placeholder = "Listening...";
+                }
+                isRecording = !isRecording;
+            });
+
+            recognition.onresult = (event) => {
+                let finalTranscript = '';
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) {
+                        finalTranscript += event.results[i][0].transcript;
+                    }
+                }
+                if (finalTranscript) {
+                    userInput.value += (userInput.value ? ' ' : '') + finalTranscript;
+                }
+            };
+
+            recognition.onerror = (event) => {
+                console.error("Speech recognition error", event.error);
+                micBtn.classList.remove('recording');
+                isRecording = false;
+            };
+        } else {
+            micBtn.style.display = 'none';
+            console.log("Speech Recognition API not supported in this browser.");
+        }
+    </script>
+</body>
+
+</html>

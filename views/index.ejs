@@ -1,27 +1,268 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Whatsapp</title>
-</head>
-<link rel="stylesheet" href="public/style.css">
-<body>
-    <h1>Welcome to Whatsapp</h1>
-    
-<% for(let chat of chats){ %>
-    <div class="chat">
-       <p>From : <%= chat.from %> </p>
-        
+    <title>AI Operations Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            margin: 0;
+            padding: 0;
+            color: #1e293b;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
 
-        <div class="message">
-            <p>msg : <%= chat.msg %></p>
+        header {
+            width: 100%;
+            text-align: center;
+            padding: 3rem 0 2rem 0;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+            margin-bottom: 3rem;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin: 0 0 0.5rem 0;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            color: #64748b;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            width: 90%;
+            max-width: 1200px;
+            margin-bottom: 4rem;
+        }
+
+        .module-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+            padding: 2.5rem 2rem;
+            box-shadow: 0 10px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .module-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #e2e8f0, #cbd5e1);
+        }
+
+        .module-card.active::before {
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+        }
+
+        .module-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 10px 10px -5px rgb(0 0 0 / 0.04);
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .module-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            background: #eff6ff;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            color: #3b82f6;
+        }
+
+        .module-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin: 0 0 1rem 0;
+            color: #0f172a;
+        }
+
+        .module-desc {
+            color: #475569;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            flex-grow: 1;
+            margin-bottom: 2rem;
+        }
+
+        .module-features {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 2rem 0;
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        .module-features li {
+            position: relative;
+            padding-left: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .module-features li::before {
+            content: '•';
+            color: #3b82f6;
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .cta-button {
+            width: 100%;
+            padding: 0.875rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            color: #fff;
+            background: #cbd5e1;
+            cursor: not-allowed;
+            transition: all 0.3s;
+            display: inline-block;
+            box-sizing: border-box;
+        }
+
+        .module-card.active .cta-button {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);
+        }
+
+        .module-card.active .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.4);
+        }
+
+        .badge {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: #dbeafe;
+            color: #1e40af;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge.upcoming {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>AI Operations Platform</h1>
+        <p>Select a module to automate your workflows using specialized Gemini models and smart AI pipelines.</p>
+    </header>
+
+    <main class="dashboard-container">
+
+        <!-- Module 1: AI Auto-Category & Tag Generator -->
+        <div class="module-card active">
+            <span class="badge">Active</span>
+            <div class="module-icon">🏷️</div>
+            <h2 class="module-title">AI Auto-Category & Tag Generator</h2>
+            <p class="module-desc">Instantly analyze product images to structure catalog metadata cleanly for your
+                database.</p>
+            <ul class="module-features">
+                <li>Auto-assign primary category</li>
+                <li>Suggest sub-category</li>
+                <li>Generate 5–10 SEO tags</li>
+                <li>Suggest sustainability filters</li>
+                <li>Deliver structured JSON output</li>
+            </ul>
+            <a href="/upload" class="cta-button">Launch Generator</a>
         </div>
 
-        <p>Received by  : <%= chat.to %></p>
-        <hr>
-    </div>
-<% } %> 
-    
+        <!-- Module 2: AI B2B Proposal Generator -->
+        <div class="module-card active">
+            <span class="badge">Active</span>
+            <div class="module-icon">📄</div>
+            <h2 class="module-title">AI B2B Proposal Generator</h2>
+            <p class="module-desc">Automatically craft B2B proposals optimized for budget constraints and impact
+                metrics.</p>
+            <ul class="module-features">
+                <li>Suggest sustainable product mix</li>
+                <li>Calculate budget allocation</li>
+                <li>Estimate cost breakdown</li>
+                <li>Summarize impact positioning</li>
+                <li>Deliver structured JSON output</li>
+            </ul>
+            <a href="/proposal" class="cta-button">Launch Generator</a>
+        </div>
+
+        <!-- Module 3: AI Impact Reporting Generator -->
+        <div class="module-card">
+            <span class="badge upcoming">Coming Soon</span>
+            <div class="module-icon">🌱</div>
+            <h2 class="module-title">AI Impact Reporting Generator</h2>
+            <p class="module-desc">Generate intelligent, human-readable impact reports based on order and product
+                analysis.</p>
+            <ul class="module-features">
+                <li>Estimate plastic saved</li>
+                <li>Calculate carbon avoided</li>
+                <li>Summarize local sourcing impact</li>
+                <li>Generate human impact statement</li>
+            </ul>
+            <a href="#" class="cta-button">Locked for Development</a>
+        </div>
+
+        <!-- Module 4: AI WhatsApp Support Bot -->
+        <div class="module-card">
+            <span class="badge upcoming">Coming Soon</span>
+            <div class="module-icon">💬</div>
+            <h2 class="module-title">AI WhatsApp Support Bot</h2>
+            <p class="module-desc">Automate customer support using real-time database queries and escalation logic.</p>
+            <ul class="module-features">
+                <li>Answer order status queries</li>
+                <li>Handle return policy questions</li>
+                <li>Escalate high-priority issues</li>
+                <li>Log conversations to database</li>
+            </ul>
+            <a href="#" class="cta-button">Locked for Development</a>
+        </div>
+
+    </main>
 </body>
+
 </html>

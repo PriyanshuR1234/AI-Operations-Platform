@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Tagged Products</title>
+    <link rel="stylesheet" href="/public/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <h1>Processed Inventory</h1>
+        <p>AI-Categorized Products Database.</p>
+        <a href="/upload" class="cta-button secondary">« Process New Image</a>
+    </header>
+    <main class="page-container gallery-container">
+        <% if (products.length===0) { %>
+            <div class="empty-state glass-card">
+                <p>No products processed yet. Start by uploading an image!</p>
+            </div>
+            <% } else { %>
+                <div class="product-grid">
+                    <% products.forEach(product=> { %>
+                        <div class="product-card glass-card">
+                            <img src="/uploads/<%= product.imageName %>" alt="Product Image" class="product-image">
+                            <div class="product-info">
+                                <h3>
+                                    <%= product.primaryCategory %>
+                                </h3>
+                                <p class="sub-category">
+                                    <%= product.subCategory %>
+                                </p>
+
+                                <div class="tags-section">
+                                    <strong>SEO Tags:</strong>
+                                    <div class="chip-container">
+                                        <% product.seoTags.forEach(tag=> { %>
+                                            <span class="chip seo-chip">
+                                                <%= tag %>
+                                            </span>
+                                            <% }) %>
+                                    </div>
+                                </div>
+
+                                <% if (product.sustainabilityFilters.length> 0) { %>
+                                    <div class="tags-section">
+                                        <strong>Sustainability:</strong>
+                                        <div class="chip-container">
+                                            <% product.sustainabilityFilters.forEach(filter=> { %>
+                                                <span class="chip filter-chip">
+                                                    <%= filter %>
+                                                </span>
+                                                <% }) %>
+                                        </div>
+                                    </div>
+                                    <% } %>
+                                        <div class="meta-footer">
+                                            <small>Analyzed: <%= new Date(product.createdAt).toLocaleString() %></small>
+                                        </div>
+                            </div>
+                        </div>
+                        <% }) %>
+                </div>
+                <% } %>
+    </main>
+</body>
+
+</html>

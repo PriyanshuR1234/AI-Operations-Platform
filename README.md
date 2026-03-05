@@ -16,6 +16,7 @@ This module streamlines digital cataloging. Instead of manually inspecting produ
 * **Suggests Sustainability Filters** (e.g., plastic-free, vegan) based on visual assessment.
 * **Impact:** Reduces catalog entry time by over 90%, entirely preventing human tagging inconsistencies by forcing AI constraints onto strict taxonomy lists. 
 
+
 ### **Module 2: AI B2B Proposal Generator**
 Designed for senior employees and sales leaders, this module automates the generation of complex, sustainable B2B business proposals using natural language inputs.
 * **Voice-to-Text Input:** Features a built-in microphone button (using the Web Speech API) allowing users to easily dictate proposal overviews entirely hands-free instead of typing typing long paragraphs.

@@ -118,5 +118,7 @@ Thumbs.db
 public/uploads/*
 !public/uploads/.gitkeep
 
+git rm -r --cached node_modules
+
 
 .env

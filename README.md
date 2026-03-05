@@ -14,7 +14,10 @@ This module streamlines digital cataloging. Instead of manually inspecting produ
 * **Suggests Sub-categories**, helping classify the product uniquely.
 * **Generates 5-10 SEO Tags**, optimizing the product for search engine visibility.
 * **Suggests Sustainability Filters** (e.g., plastic-free, vegan) based on visual assessment.
-* **Impact:** Reduces catalog entry time by over 90%, entirely preventing human tagging inconsistencies by forcing AI constraints onto strict taxonomy lists. 
+* **Impact:** Reduces catalog entry time by over 90%, entirely preventing human tagging inconsistencies by forcing AI constraints onto strict taxonomy lists.
+
+  <img width="1467" height="868" alt="Screenshot 2026-03-04 at 10 30 25 PM" src="https://github.com/user-attachments/assets/ad73b3ed-0288-4bd8-93b1-7bfb41ef548e" />
+
 
 
 ### **Module 2: AI B2B Proposal Generator**
@@ -28,6 +31,11 @@ Designed for senior employees and sales leaders, this module automates the gener
 * **Impact:** Eliminates the need for tedious manual proposal drafting. Senior staff can instantly build structured, editable proposal drafts, adjust them quickly via UI, and print them immediately to PDF.
 
 ---
+
+<img width="1466" height="820" alt="Screenshot 2026-03-04 at 10 32 27 PM" src="https://github.com/user-attachments/assets/5ab75768-6459-484d-acdf-51c7986aa517" />
+<img width="1465" height="824" alt="Screenshot 2026-03-04 at 10 32 53 PM" src="https://github.com/user-attachments/assets/d6d83626-6823-4ca2-8678-80ff0e678e90" />
+
+
 
 ## 🏗 System Architecture
 
